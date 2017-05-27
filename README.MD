@@ -25,7 +25,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 
 // Import your library
-import { SampleModule } from 'couchdb-connector';
+import { CouchdbModule } from 'couchdb-connector';
 
 @NgModule({
   declarations: [
