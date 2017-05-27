@@ -1,0 +1,26 @@
+{
+  "name": "couchdb-connector",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrDolch/angular-couchdb.git"
+  },
+  "author": {
+    "name": "Mr. Dolch",
+    "email": "dolch@nice-technologies.com"
+  },
+  "keywords": [
+    "angular"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MrDolch/angular-couchdb.git/issues"
+  },
+  "module": "couchdb-connector.js",
+  "typings": "couchdb-connector.d.ts",
+  "peerDependencies": {
+    "@angular/core": "^4.0.0",
+    "rxjs": "^5.1.0",
+    "zone.js": "^0.8.4"
+  }
+}
