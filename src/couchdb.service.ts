@@ -4,12 +4,22 @@ import { Observable }    from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'couchdb-doc',
+  template: `<h1>{{class}}#{{_id}}</h1>`
+})
 export class CouchdbDoc {
   _id: string;
   _rev: string;
   class: string;
 }
 
+@Component({
+  selector: 'couchdb-list-entry',
+  template: `<h1>{{doc.class}}#{{id}}</h1>`
+})
 export class CouchdbListEntry {
   id: string;
   key: string;
