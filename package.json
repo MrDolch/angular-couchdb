@@ -1,6 +1,6 @@
 {
   "name": "couchdb-connector",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
@@ -17,7 +17,7 @@
   },
   "author": {
     "name": "Mr. Dolch",
-    "email": "dolch@nice-technologies.com"
+    "email": "dolch at nice-technologies.com"
   },
   "keywords": [
     "angular"

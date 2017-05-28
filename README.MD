@@ -5,7 +5,7 @@
 To install this library, run:
 
 ```bash
-$ npm install couchdb-connector --save
+npm install couchdb-connector --save
 ```
 
 ## Consuming your library
@@ -13,7 +13,7 @@ $ npm install couchdb-connector --save
 Once you have published your library to npm, you can import your library in any Angular application by running:
 
 ```bash
-$ npm install couchdb-connector
+npm install couchdb-connector
 ```
 
 and then from your Angular `AppModule`:
@@ -35,12 +35,21 @@ import { CouchdbModule } from 'couchdb-connector';
     BrowserModule,
 
     // Specify your library as an import
-    LibraryModule
+    CouchdbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+```
+
+And add to systemjs.config.js:
+
+```typescript
+    packages: {
+      'couchdb-connector': { main: 'index.js', defaultExtension: 'js' },
+      traceur:{        main: 'traceur' }
+    }
 ```
 
 Once your library is imported, you can use its components, directives and pipes in your Angular application:
@@ -58,15 +67,15 @@ Once your library is imported, you can use its components, directives and pipes 
 To generate all `*.js`, `*.d.ts` and `*.metadata.json` files:
 
 ```bash
-$ npm run build
+npm run build
 ```
 
 To lint all `*.ts` files:
 
 ```bash
-$ npm run lint
+npm run lint
 ```
 
 ## License
 
-MIT © [Mr. Dolch](mailto:dolch@nice-technologies.com)
+MIT © Mr. Dolch / dolch at nice-technologies.com
