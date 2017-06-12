@@ -19,6 +19,7 @@ export * from './couchdb.service';
     CouchdbListEntry,
   ]
 })
+
 export class CouchdbModule {
   static forRoot(): ModuleWithProviders {
     return {
