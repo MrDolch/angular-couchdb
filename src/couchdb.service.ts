@@ -47,6 +47,14 @@ export class CouchdbService<T extends CouchdbDoc> {
       .catch(this.handleError);
   }
 
+  getAllFor(...keys: string[]): Promise<T[]> {
+    return this.http.get(this.getViewUrl(keys)).toPromise()
+      .then(res => (res.json().rows as CouchdbViewEntry[])
+        .map(r => r.value) as T[])
+      .catch(this.handleError);
+  }
+
+
   protected handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
     console.error('Error!\nMessage: ' + error.message);
@@ -118,14 +126,6 @@ export class CouchdbService<T extends CouchdbDoc> {
     console.log(url);
     return url;
   }
-
-  getAllFor(...keys: string[]): Promise<T[]> {
-    return this.http.get(this.getViewUrl(keys)).toPromise()
-      .then(res => (res.json().rows as CouchdbViewEntry[])
-        .map(r => r.value) as T[])
-      .catch(this.handleError);
-  }
-
 
 }
 

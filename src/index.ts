@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 
-import { CouchdbService, CouchdbDoc, CouchdbListEntry } from './couchdb.service';
+import { CouchdbService, CouchdbDoc, CouchdbListEntry, CouchdbViewEntry } from './couchdb.service';
 
 export * from './couchdb.service';
 
@@ -13,10 +13,12 @@ export * from './couchdb.service';
   declarations: [
     CouchdbDoc,
     CouchdbListEntry,
+    CouchdbViewEntry,
   ],
   exports: [
     CouchdbDoc,
     CouchdbListEntry,
+    CouchdbViewEntry,
   ]
 })
 
