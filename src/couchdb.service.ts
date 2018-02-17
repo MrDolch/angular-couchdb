@@ -26,6 +26,10 @@ export class CouchdbListEntry {
   doc: CouchdbDoc;
 }
 
+@Component({
+  selector: 'couchdb-view-entry',
+  template: `<h1>{{doc.class}}#{{value._id}}</h1>`
+})
 export class CouchdbViewEntry {
   value: CouchdbDoc;
 }
