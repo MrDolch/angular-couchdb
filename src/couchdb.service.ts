@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
   selector: 'couchdb-doc',
   template: `<h1>{{class}}#{{_id}}</h1>`
 })
-export class CouchdbDoc {
+export class CouchdbDocComponent {
   _id: string;
   _rev: string;
   class: string;
@@ -20,21 +20,21 @@ export class CouchdbDoc {
   selector: 'couchdb-list-entry',
   template: `<h1>{{doc.class}}#{{id}}</h1>`
 })
-export class CouchdbListEntry {
+export class CouchdbListEntryComponent {
   id: string;
   key: string;
-  doc: CouchdbDoc;
+  doc: CouchdbDocComponent;
 }
 
 @Component({
   selector: 'couchdb-view-entry',
   template: `<h1>{{doc.class}}#{{value._id}}</h1>`
 })
-export class CouchdbViewEntry {
-  value: CouchdbDoc;
+export class CouchdbViewEntryComponent {
+  value: CouchdbDocComponent;
 }
 
-export class CouchdbService<T extends CouchdbDoc> {
+export class CouchdbService<T extends CouchdbDocComponent> {
 
   private headers = new Headers({ 'Content-Type': 'application/json' });
 
@@ -47,13 +47,13 @@ export class CouchdbService<T extends CouchdbDoc> {
     return this.http
       .get(`/${this.dbName}/_all_docs?include_docs=true`)
       .toPromise()
-      .then(res => (res.json().rows as CouchdbListEntry[]).map(r => r.doc) as T[])
+      .then(res => (res.json().rows as CouchdbListEntryComponent[]).map(r => r.doc) as T[])
       .catch(this.handleError);
   }
 
   getAllFor(...keys: string[]): Promise<T[]> {
     return this.http.get(this.getViewUrl(keys)).toPromise()
-      .then(res => (res.json().rows as CouchdbViewEntry[])
+      .then(res => (res.json().rows as CouchdbViewEntryComponent[])
         .map(r => r.value) as T[])
       .catch(this.handleError);
   }
@@ -114,7 +114,7 @@ export class CouchdbService<T extends CouchdbDoc> {
   search(field: string, term: string): Observable<T[]> {
     return this.http
       .get(`/${this.dbName}/_all_docs?include_docs=true`)
-      .map(res => (res.json().rows as CouchdbListEntry[])
+      .map(res => (res.json().rows as CouchdbListEntryComponent[])
         .map(r => r.doc as T)
         .filter(t => t[field].indexOf(term) !== -1));
   }
