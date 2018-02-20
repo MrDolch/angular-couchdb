@@ -28,7 +28,7 @@ export class CouchdbListEntryComponent {
 
 @Component({
   selector: 'couchdb-view-entry',
-  template: `<h1>{{doc.class}}#{{value._id}}</h1>`
+  template: `<h1>{{value.class}}#{{value._id}}</h1>`
 })
 export class CouchdbViewEntryComponent {
   value: CouchdbDocComponent;
@@ -76,8 +76,8 @@ export class CouchdbService<T extends CouchdbDocComponent> {
   update(doc: T): Promise<T> {
     return this.http
       .put(`/${this.dbName}/${doc._id}`
-        , JSON.stringify(doc, (key, value) => (key === 'transient' ? undefined : value))
-        , { headers: new Headers({ 'Content-Type': 'application/json' }) }
+      , JSON.stringify(doc, (key, value) => (key === 'transient' ? undefined : value))
+      , { headers: new Headers({ 'Content-Type': 'application/json' }) }
       )
       .toPromise()
       .then(x => {
