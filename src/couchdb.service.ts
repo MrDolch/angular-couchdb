@@ -34,15 +34,17 @@ export class CouchdbViewEntryComponent {
   value: CouchdbDocComponent;
 }
 
+const JSON_HEADERS = new Headers({ 'Content-Type': 'application/json' });
+
 export class CouchdbService<T extends CouchdbDocComponent> {
 
-  private headers = new Headers({ 'Content-Type': 'application/json' });
 
   constructor(
     protected http: Http,
     protected dbName: string,
     protected viewName: string) { }
 
+  /** @returns all stored objects of class T */
   getAll(): Promise<T[]> {
     return this.http
       .get(`/${this.dbName}/_all_docs?include_docs=true`)
@@ -51,6 +53,7 @@ export class CouchdbService<T extends CouchdbDocComponent> {
       .catch(this.handleError);
   }
 
+  /** @returns  all stored objects of class T matching keys */
   getAllFor(...keys: string[]): Promise<T[]> {
     return this.http.get(this.getViewUrl(keys)).toPromise()
       .then((res: Response) => (res.json().rows as CouchdbViewEntryComponent[])
@@ -58,6 +61,10 @@ export class CouchdbService<T extends CouchdbDocComponent> {
       .catch(this.handleError);
   }
 
+  /**
+   * Handles Exception during requests to couchdb.
+   * Override this method for your own handler.
+   */
   protected handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
     console.error('Error!\nMessage: ' + error.message);
@@ -76,7 +83,7 @@ export class CouchdbService<T extends CouchdbDocComponent> {
     return this.http
       .put(`/${this.dbName}/${doc._id}`
       , JSON.stringify(doc, (key, value) => (key === 'transient' ? undefined : value))
-      , { headers: new Headers({ 'Content-Type': 'application/json' }) }
+      , { headers: JSON_HEADERS }
       )
       .toPromise()
       .then((res: Response) => {
@@ -91,7 +98,7 @@ export class CouchdbService<T extends CouchdbDocComponent> {
   create(doc: T): Promise<T> {
     doc.class = doc.constructor.name;
     return this.http
-      .post(`/${this.dbName}`, JSON.stringify(doc), { headers: this.headers })
+      .post(`/${this.dbName}`, JSON.stringify(doc), { headers: JSON_HEADERS })
       .toPromise()
       .then((res: Response) => {
         let r = res.json();
@@ -104,7 +111,7 @@ export class CouchdbService<T extends CouchdbDocComponent> {
 
   delete(id: string, rev: string): Promise<void> {
     return this.http
-      .delete(`/${this.dbName}/${id}?rev=${rev}`, { headers: this.headers })
+      .delete(`/${this.dbName}/${id}?rev=${rev}`, { headers: JSON_HEADERS })
       .toPromise()
       .then(() => null)
       .catch(this.handleError);
