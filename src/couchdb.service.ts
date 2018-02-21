@@ -1,4 +1,4 @@
-import { Headers, Http } from '@angular/http';
+import { Headers, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/map';
@@ -47,17 +47,16 @@ export class CouchdbService<T extends CouchdbDocComponent> {
     return this.http
       .get(`/${this.dbName}/_all_docs?include_docs=true`)
       .toPromise()
-      .then(res => (res.json().rows as CouchdbListEntryComponent[]).map(r => r.doc) as T[])
+      .then((res: Response) => (res.json().rows as CouchdbListEntryComponent[]).map(r => r.doc) as T[])
       .catch(this.handleError);
   }
 
   getAllFor(...keys: string[]): Promise<T[]> {
     return this.http.get(this.getViewUrl(keys)).toPromise()
-      .then(res => (res.json().rows as CouchdbViewEntryComponent[])
+      .then((res: Response) => (res.json().rows as CouchdbViewEntryComponent[])
         .map(r => r.value) as T[])
       .catch(this.handleError);
   }
-
 
   protected handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
@@ -69,7 +68,7 @@ export class CouchdbService<T extends CouchdbDocComponent> {
     return this.http
       .get(`/${this.dbName}/${id}`)
       .toPromise()
-      .then(res => res.json() as T)
+      .then((res: Response) => res.json() as T)
       .catch(this.handleError);
   }
 
@@ -80,8 +79,8 @@ export class CouchdbService<T extends CouchdbDocComponent> {
       , { headers: new Headers({ 'Content-Type': 'application/json' }) }
       )
       .toPromise()
-      .then(x => {
-        let r = x.json();
+      .then((res: Response) => {
+        let r = res.json();
         doc._id = r.id;
         doc._rev = r.rev;
         return doc;
@@ -94,7 +93,7 @@ export class CouchdbService<T extends CouchdbDocComponent> {
     return this.http
       .post(`/${this.dbName}`, JSON.stringify(doc), { headers: this.headers })
       .toPromise()
-      .then(res => {
+      .then((res: Response) => {
         let r = res.json();
         doc._id = r.id;
         doc._rev = r.rev;
