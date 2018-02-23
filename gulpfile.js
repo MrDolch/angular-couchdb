@@ -64,7 +64,7 @@ gulp.task('rollup:fesm', function () {
 
       // Bundle's entry point
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#entry
-      entry: `${buildFolder}/index.js`,
+      input: `${buildFolder}/index.js`,
 
       // Allow mixing of hypothetical and actual files. "Actual" files can be files
       // accessed by Rollup or produced by plugins further down the chain.
@@ -75,13 +75,18 @@ gulp.task('rollup:fesm', function () {
       // A list of IDs of modules that should remain external to the bundle
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#external
       external: [
+        'rxjs/add/operator/map',
+        'rxjs/add/operator/toPromise',
+        '@angular/http',
         '@angular/core',
         '@angular/common'
       ],
 
       // Format of generated bundle
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#format
-      format: 'es'
+      output: {
+        format: 'es'
+      }
     }))
     .pipe(gulp.dest(distFolder));
 });
@@ -91,13 +96,25 @@ gulp.task('rollup:fesm', function () {
  *    generated file into the /dist folder
  */
 gulp.task('rollup:umd', function () {
+  const rollupGlobals = {
+    '@angular/core': 'ng.core',
+    '@angular/http': 'ng.http',
+    '@angular/common': 'ng.common',
+    '@angular/forms': 'ng.forms',
+    '@angular/router': 'ng.router',
+    'rxjs/Observable': 'Rx.Observable',
+    'rxjs/Subject': 'Rx.Subject',
+    'rxjs/add/operator/map': 'Rx.Observable.map',
+    'rxjs/add/operator/toPromise': 'Rx.Observable.toPromise',
+    'typescript': 'ts'
+  }
   return gulp.src(`${buildFolder}/**/*.js`)
     // transform the files here.
     .pipe(rollup({
 
       // Bundle's entry point
       // See https://github.com/rollup/rollup/wiki/JavaScript-API#entry
-      entry: `${buildFolder}/index.js`,
+      input: `${buildFolder}/index.js`,
 
       // Allow mixing of hypothetical and actual files. "Actual" files can be files
       // accessed by Rollup or produced by plugins further down the chain.
@@ -106,30 +123,25 @@ gulp.task('rollup:umd', function () {
       allowRealFiles: true,
 
       // A list of IDs of modules that should remain external to the bundle
-      // See https://github.com/rollup/rollup/wiki/JavaScript-API#external
-      external: [
-        '@angular/core',
-        '@angular/common'
-      ],
+      // See "external" in https://rollupjs.org/#core-functionality
+      external: Object.keys(rollupGlobals),
 
-      // Format of generated bundle
-      // See https://github.com/rollup/rollup/wiki/JavaScript-API#format
-      format: 'umd',
+      output: {
+        // Format of generated bundle
+        // See https://github.com/rollup/rollup/wiki/JavaScript-API#format
+        format: 'umd',
+        // The name to use for the module for UMD/IIFE bundles
+        // (required for bundles with exports)
+        // See https://github.com/rollup/rollup/wiki/JavaScript-API#modulename
+        name: 'couchdb-connector',
 
-      // Export mode to use
-      // See https://github.com/rollup/rollup/wiki/JavaScript-API#exports
-      exports: 'named',
+        // See "globals" in https://rollupjs.org/#core-functionality
+        globals: rollupGlobals,
 
-      // The name to use for the module for UMD/IIFE bundles
-      // (required for bundles with exports)
-      // See https://github.com/rollup/rollup/wiki/JavaScript-API#modulename
-      moduleName: 'couchdb-connector',
-
-      // See https://github.com/rollup/rollup/wiki/JavaScript-API#globals
-      globals: {
-        typescript: 'ts'
-      }
-
+        // Export mode to use
+        // See https://github.com/rollup/rollup/wiki/JavaScript-API#exports
+        exports: 'named',
+      },
     }))
     .pipe(rename('couchdb-connector.umd.js'))
     .pipe(gulp.dest(distFolder));
