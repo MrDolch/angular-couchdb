@@ -35,7 +35,7 @@
     "@angular/platform-browser": "~5.2.5",
     "@angular/platform-browser-dynamic": "~5.2.5",
     "@angular/router": "~5.2.5",
-    "systemjs": "0.21.0",
+    "systemjs": "0.21.6",
     "core-js": "^2.4.1",
     "rxjs": "5.5.6",
     "zone.js": "^0.8.4"
